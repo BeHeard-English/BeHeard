@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
 <title>Nối Từ Vựng – Be Heard</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
@@ -340,7 +340,7 @@
   .next-btn.visible { display: block; }
   .next-btn:active { transform: scale(0.96); }
 
-  /* ── GAME SCREEN – 2 PLAYERS ── */
+  /* ── GAME SCREEN – 2 PLAYERS (CỠ CHỮ TĂNG LÊN) ── */
   #game2-screen { padding: 8px; gap: 8px; min-height: 100vh; display: flex; flex-direction: column; }
   .game2-header {
     display: flex;
@@ -350,7 +350,7 @@
     flex-shrink: 0;
   }
   .rounds-info {
-    font-size: 0.9rem;
+    font-size: 1rem;
     font-weight: 800;
     color: var(--gold);
     background: linear-gradient(135deg, #FEF3C7, #FDE68A);
@@ -361,7 +361,7 @@
   }
   .game2-arena {
     display: flex;
-    gap: 8px;
+    gap: 12px;
     flex: 1;
     width: 100%;
     min-height: 0;
@@ -370,36 +370,43 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 6px;
-    background: rgba(255,255,255,0.85);
+    gap: 10px;
+    background: rgba(255,255,255,0.92);
     backdrop-filter: blur(8px);
-    border-radius: 16px;
-    padding: 10px 8px;
+    border-radius: 20px;
+    padding: 12px 10px;
     border: 2px solid transparent;
     transition: border-color 0.25s, box-shadow 0.25s;
     box-shadow: 0 3px 16px rgba(124,58,237,0.1);
     min-height: 0;
     overflow: hidden;
   }
-  .player-panel.p1-color { border-top: 4px solid #7C3AED; }
-  .player-panel.p2-color { border-top: 4px solid #2563EB; }
+  .player-panel.p1-color { border-top: 5px solid #7C3AED; }
+  .player-panel.p2-color { border-top: 5px solid #2563EB; }
 
   .player-header {
     display: flex;
-    align-items: center;
+    align-items: baseline;
     justify-content: space-between;
-    padding: 0 2px;
+    padding: 0 4px;
   }
-  .player-name { font-size: 0.95rem; font-weight: 900; }
+  .player-name { 
+    font-size: 1.1rem; 
+    font-weight: 900; 
+  }
   .p1-color .player-name { color: #7C3AED; }
   .p2-color .player-name { color: #2563EB; }
-  .player-score { font-size: 1.4rem; font-weight: 900; color: var(--gold); }
+  .player-score { 
+    font-size: 1.7rem; 
+    font-weight: 900; 
+    color: var(--gold); 
+  }
 
   .player-timer {
-    font-size: 1.7rem;
+    font-size: 2rem;
     font-weight: 900;
     text-align: center;
-    line-height: 1;
+    line-height: 1.2;
   }
   .p1-color .player-timer { color: #7C3AED; }
   .p2-color .player-timer { color: #2563EB; }
@@ -407,11 +414,11 @@
   .player-timer.waiting { color: var(--text2) !important; font-size: 1rem; }
 
   /* Win streak dots */
-  .win-dots { display: flex; gap: 5px; justify-content: center; flex-wrap: wrap; }
+  .win-dots { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin: 4px 0; }
   .win-dot {
-    width: 14px; height: 14px;
+    width: 16px; height: 16px;
     border-radius: 50%;
-    border: 2px solid;
+    border: 2.5px solid;
     transition: background 0.3s;
   }
   .p1-color .win-dot { border-color: #7C3AED; }
@@ -420,60 +427,61 @@
   .p2-color .win-dot.filled { background: #2563EB; }
 
   .p2-match-area { flex: 1; position: relative; display: flex; flex-direction: column; min-height: 200px; }
-  .p2-columns { display: flex; gap: 4px; flex: 1; min-height: 0; }
-  .p2-col { flex: 1; display: flex; flex-direction: column; gap: 5px; z-index: 2; }
+  .p2-columns { display: flex; gap: 10px; flex: 1; min-height: 0; }
+  .p2-col { flex: 1; display: flex; flex-direction: column; gap: 10px; z-index: 2; }
   .p2-svg {
     position: absolute; top: 0; left: 0; right: 0; bottom: 0;
     pointer-events: none; z-index: 1; overflow: visible;
   }
 
+  /* CỠ CHỮ LỚN HƠN CHO 2 NGƯỜI */
   .word-card-sm {
     background: var(--card);
-    border: 2px solid rgba(124,58,237,0.1);
-    border-radius: 10px;
-    padding: 8px 5px;
-    font-size: 0.82rem;
-    font-weight: 700;
+    border: 2.5px solid rgba(124,58,237,0.1);
+    border-radius: 14px;
+    padding: 12px 8px;
+    font-size: 0.95rem;
+    font-weight: 800;
     text-align: center;
     cursor: pointer;
     user-select: none;
     transition: all 0.15s;
-    min-height: 42px;
+    min-height: 55px;
     display: flex;
     align-items: center;
     justify-content: center;
-    line-height: 1.2;
+    line-height: 1.3;
     color: var(--text);
-    box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   }
-  .word-card-sm:active { transform: scale(0.94); }
-  .p1-panel .word-card-sm.selected, .p1-sel { border-color: #7C3AED !important; background: rgba(124,58,237,0.08) !important; color: #7C3AED !important; }
-  .p2-panel .word-card-sm.selected, .p2-sel { border-color: #2563EB !important; background: rgba(37,99,235,0.08) !important; color: #2563EB !important; }
-  .word-card-sm.sel-p1 { border-color: #7C3AED; background: rgba(124,58,237,0.08); color: #7C3AED; }
-  .word-card-sm.sel-p2 { border-color: #2563EB; background: rgba(37,99,235,0.08); color: #2563EB; }
-  .word-card-sm.matched-correct { border-color: var(--green); background: rgba(22,163,74,0.08); color: var(--green); pointer-events: none; opacity: 0.75; }
-  .word-card-sm.matched-wrong { border-color: var(--red); background: rgba(220,38,38,0.06); animation: shake 0.35s ease; }
+  .word-card-sm:active { transform: scale(0.95); }
+  .p1-panel .word-card-sm.selected, .p1-sel { border-color: #7C3AED !important; background: rgba(124,58,237,0.12) !important; color: #7C3AED !important; transform: scale(1.02); }
+  .p2-panel .word-card-sm.selected, .p2-sel { border-color: #2563EB !important; background: rgba(37,99,235,0.12) !important; color: #2563EB !important; transform: scale(1.02); }
+  .word-card-sm.sel-p1 { border-color: #7C3AED; background: rgba(124,58,237,0.12); color: #7C3AED; }
+  .word-card-sm.sel-p2 { border-color: #2563EB; background: rgba(37,99,235,0.12); color: #2563EB; }
+  .word-card-sm.matched-correct { border-color: var(--green); background: rgba(22,163,74,0.12); color: var(--green); pointer-events: none; opacity: 0.85; text-decoration: line-through; }
+  .word-card-sm.matched-wrong { border-color: var(--red); background: rgba(220,38,38,0.1); animation: shake 0.35s ease; }
 
   /* Locked panel overlay */
   .panel-done-msg {
     visibility: hidden;
     opacity: 0;
     position: absolute; inset: 0;
-    background: rgba(255,255,255,0.9);
-    border-radius: 14px;
+    background: rgba(255,255,255,0.95);
+    border-radius: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    gap: 8px;
+    gap: 12px;
     z-index: 10;
-    font-size: 1.5rem;
+    font-size: 1.6rem;
     font-weight: 900;
     transition: opacity 0.2s;
     pointer-events: none;
   }
   .panel-done-msg.show { visibility: visible; opacity: 1; pointer-events: auto; }
-  .panel-done-msg .done-icon { font-size: 2.5rem; }
+  .panel-done-msg .done-icon { font-size: 3rem; }
 
   /* ── RESULT SCREEN ── */
   #result-screen {
@@ -585,11 +593,17 @@
   /* ── RESPONSIVE ── */
   @media (min-width: 600px) {
     .word-card { font-size: 1.15rem; padding: 16px 14px; min-height: 62px; }
-    #setup-screen { padding: 32px 24px 40px; }
+    .word-card-sm { font-size: 1.05rem; padding: 14px 10px; min-height: 62px; }
+    .player-name { font-size: 1.3rem; }
+    .player-score { font-size: 1.9rem; }
+    .player-timer { font-size: 2.2rem; }
   }
-  @media (max-width: 400px) {
+  @media (max-width: 450px) {
     .word-card { font-size: 0.92rem; padding: 10px 8px; min-height: 48px; border-radius: 10px; }
-    .word-card-sm { font-size: 0.75rem; padding: 6px 4px; min-height: 36px; }
+    .word-card-sm { font-size: 0.85rem; padding: 10px 6px; min-height: 52px; }
+    .game2-arena { gap: 6px; }
+    .p2-columns { gap: 6px; }
+    .p2-col { gap: 6px; }
   }
 </style>
 </head>
@@ -700,7 +714,7 @@
       </div>
       <div class="panel-done-msg" id="p1-done-msg">
         <div class="done-icon">✅</div>
-        <div style="color:#16A34A; font-size:1.1rem;">Xong! Đợi lượt mới...</div>
+        <div style="color:#16A34A; font-size:1.2rem; font-weight:800;">Xong! Đợi lượt mới...</div>
       </div>
     </div>
     <!-- Player 2 Panel -->
@@ -720,7 +734,7 @@
       </div>
       <div class="panel-done-msg" id="p2-done-msg">
         <div class="done-icon">✅</div>
-        <div style="color:#16A34A; font-size:1.1rem;">Xong! Đợi lượt mới...</div>
+        <div style="color:#16A34A; font-size:1.2rem; font-weight:800;">Xong! Đợi lượt mới...</div>
       </div>
     </div>
   </div>
@@ -774,7 +788,7 @@ let g2StartTimes = [0, 0];
 let g2ElapsedTimes = [0, 0];
 let g2CurrentPairs = [[], []];   // each player has own shuffled set
 let g2RoundActive = [false, false];
-let g2OverlayPending = null;
+let g2GameActive = true;
 
 // ═══ AUDIO ═══
 function getAudioCtx() {
@@ -994,15 +1008,19 @@ function endGame1P() {
 }
 
 // ═══ 2 PLAYER — INDEPENDENT ROUNDS ═══
-// Rules: Each player plays their own 5-pair set independently.
-// When a player finishes their set → they win that round.
-// First to reach totalRounds wins wins the game.
-// Both players always have an active board. When one finishes, their board shows "done"
-// overlay and immediately loads a new set for them, while other player keeps playing.
-
 function startGame2P() {
+  g2GameActive = true;
   g2Scores = [0, 0];
   g2RoundActive = [false, false];
+  g2Finished = [false, false];
+  g2MatchedCounts = [0, 0];
+  g2SelectedCards = [{}, {}];
+  g2CurrentPairs = [[], []];
+  
+  // Clear any existing timers
+  g2TimerIntervals.forEach(t => { if(t) clearInterval(t); });
+  g2TimerIntervals = [null, null];
+  
   document.getElementById('p1-display-name').textContent = document.getElementById('p1-name').value || 'Đội 1';
   document.getElementById('p2-display-name').textContent = document.getElementById('p2-name').value || 'Đội 2';
   document.getElementById('g2-total-rounds').textContent = totalRounds;
@@ -1015,15 +1033,17 @@ function startGame2P() {
 }
 
 function startPlayerRound(pi) {
+  if (!g2GameActive) return;
   const p = pi + 1;
-  g2CurrentPairs[pi] = shuffle(allPairs).slice(0, 5);
+  g2CurrentPairs[pi] = shuffle(allPairs).slice(0, Math.min(5, allPairs.length));
   g2MatchedCounts[pi] = 0;
   g2SelectedCards[pi] = {};
   g2Finished[pi] = false;
   g2RoundActive[pi] = true;
 
   // Hide done overlay
-  document.getElementById(`p${p}-done-msg`).classList.remove('show');
+  const doneMsg = document.getElementById(`p${p}-done-msg`);
+  if (doneMsg) doneMsg.classList.remove('show');
 
   // Reset timer
   if (g2TimerIntervals[pi]) clearInterval(g2TimerIntervals[pi]);
@@ -1033,7 +1053,7 @@ function startPlayerRound(pi) {
   timerEl.textContent = '0.0s';
   timerEl.className = 'player-timer';
   g2TimerIntervals[pi] = setInterval(() => {
-    if (g2Finished[pi]) return;
+    if (g2Finished[pi] || !g2GameActive) return;
     g2ElapsedTimes[pi] = ((Date.now() - g2StartTimes[pi]) / 1000);
     timerEl.textContent = g2ElapsedTimes[pi].toFixed(1) + 's';
   }, 100);
@@ -1045,8 +1065,10 @@ function renderPlayer2P(p, pairs) {
   const pi = p - 1;
   const colL = document.getElementById(`p${p}-col-left`);
   const colR = document.getElementById(`p${p}-col-right`);
+  if (!colL || !colR) return;
   colL.innerHTML = ''; colR.innerHTML = '';
-  document.getElementById(`p${p}-svg`).innerHTML = '';
+  const svgEl = document.getElementById(`p${p}-svg`);
+  if (svgEl) svgEl.innerHTML = '';
   const rights = shuffle(pairs.map(pr => pr.vi));
   pairs.forEach((pair, i) => {
     const c = makeCard(pair.en, 'word-card-sm');
@@ -1054,17 +1076,18 @@ function renderPlayer2P(p, pairs) {
     c.addEventListener('click', () => clickCard2P(c, 'left', i, p));
     colL.appendChild(c);
   });
-  rights.forEach((vi) => {
+  rights.forEach((vi, idx) => {
     const c = makeCard(vi, 'word-card-sm');
     c.dataset.vi = vi; c.dataset.side = 'right';
-    c.addEventListener('click', () => clickCard2P(c, 'right', 0, p));
+    c.dataset.rightIdx = idx;
+    c.addEventListener('click', () => clickCard2P(c, 'right', idx, p));
     colR.appendChild(c);
   });
 }
 
 function clickCard2P(card, side, idx, p) {
   const pi = p - 1;
-  if (g2Finished[pi]) return;
+  if (g2Finished[pi] || !g2GameActive) return;
   if (card.classList.contains('matched-correct')) return;
   const selClass = pi === 0 ? 'sel-p1' : 'sel-p2';
   if (side === 'left') {
@@ -1091,7 +1114,9 @@ function checkMatch2P(p) {
     sel.left.classList.add('matched-correct'); sel.right.classList.add('matched-correct');
     const lineColor = pi === 0 ? '#7C3AED' : '#2563EB';
     drawLine(`p${p}-svg`, `p${p}-match-area`, sel.left, sel.right, lineColor);
-    playCorrect(); burst(sel.left, lineColor);
+    playCorrect(); 
+    burst(sel.left, lineColor);
+    burst(sel.right, lineColor);
     g2MatchedCounts[pi]++;
     if (g2MatchedCounts[pi] === g2CurrentPairs[pi].length) {
       finishPlayer2P(p);
@@ -1100,8 +1125,8 @@ function checkMatch2P(p) {
     sel.left.classList.add('matched-wrong'); sel.right.classList.add('matched-wrong');
     playWrong();
     setTimeout(() => {
-      sel.left && sel.left.classList.remove(selClass, 'matched-wrong');
-      sel.right && sel.right.classList.remove(selClass, 'matched-wrong');
+      if (sel.left) sel.left.classList.remove(selClass, 'matched-wrong');
+      if (sel.right) sel.right.classList.remove(selClass, 'matched-wrong');
     }, 400);
   }
   g2SelectedCards[pi] = {};
@@ -1109,6 +1134,7 @@ function checkMatch2P(p) {
 
 function finishPlayer2P(p) {
   const pi = p - 1;
+  if (!g2GameActive) return;
   clearInterval(g2TimerIntervals[pi]);
   g2TimerIntervals[pi] = null;
   g2Finished[pi] = true;
@@ -1132,9 +1158,11 @@ function finishPlayer2P(p) {
   // Check if this player has won the game
   if (s >= totalRounds) {
     // Game over!
+    g2GameActive = false;
     g2TimerIntervals.forEach(t => { if(t) clearInterval(t); });
     setTimeout(() => {
-      playWin(); burstFullscreen(pi === 0 ? '#7C3AED' : '#2563EB');
+      playWin(); 
+      burstFullscreen(pi === 0 ? '#7C3AED' : '#2563EB');
       endGame2P();
     }, 800);
     return;
@@ -1142,19 +1170,24 @@ function finishPlayer2P(p) {
 
   // Show brief win notification then reload this player's board
   showRoundWin(pi, n, s, () => {
-    startPlayerRound(pi);
+    if (g2GameActive) {
+      startPlayerRound(pi);
+    }
   });
 }
 
 function showRoundWin(pi, name, wins, callback) {
   const p = pi + 1;
-  // Show done overlay briefly on the panel
-  document.getElementById(`p${p}-done-msg`).querySelector('div:last-child').textContent =
-    `🎉 Thắng lượt! (${wins}/${totalRounds})`;
-  document.getElementById(`p${p}-done-msg`).classList.add('show');
+  const doneMsg = document.getElementById(`p${p}-done-msg`);
+  if (doneMsg) {
+    const msgDiv = doneMsg.querySelector('div:last-child');
+    if (msgDiv) msgDiv.textContent = `🎉 ${name} thắng lượt! (${wins}/${totalRounds}) 🎉`;
+    doneMsg.classList.add('show');
+  }
   setTimeout(() => {
+    if (doneMsg) doneMsg.classList.remove('show');
     callback();
-  }, 1200);
+  }, 1500);
 }
 
 function updateScoreDisplay2P() {
@@ -1166,6 +1199,7 @@ function updateDots() {
   [1,2].forEach(p => {
     const pi = p - 1;
     const container = document.getElementById(`p${p}-dots`);
+    if (!container) return;
     container.innerHTML = '';
     for (let i = 0; i < totalRounds; i++) {
       const dot = document.createElement('div');
@@ -1200,34 +1234,54 @@ function closeOverlay() {
   document.getElementById('round-overlay').classList.remove('show');
 }
 
-// ═══ DRAW LINE ═══
+// ═══ DRAW LINE (CẢI THIỆN) ═══
 function drawLine(svgId, areaId, left, right, color) {
   const svg = document.getElementById(svgId);
-  const area = document.getElementById(areaId).getBoundingClientRect();
+  const area = document.getElementById(areaId);
+  if (!svg || !area || !left || !right) return;
+  
+  const areaRect = area.getBoundingClientRect();
   const lr = left.getBoundingClientRect();
   const rr = right.getBoundingClientRect();
-  const x1 = lr.right - area.left, y1 = lr.top + lr.height/2 - area.top;
-  const x2 = rr.left - area.left, y2 = rr.top + rr.height/2 - area.top;
+  
+  const x1 = lr.right - areaRect.left;
+  const y1 = lr.top + lr.height/2 - areaRect.top;
+  const x2 = rr.left - areaRect.left;
+  const y2 = rr.top + rr.height/2 - areaRect.top;
+  
   const line = document.createElementNS('http://www.w3.org/2000/svg','line');
-  line.setAttribute('x1',x1); line.setAttribute('y1',y1);
-  line.setAttribute('x2',x2); line.setAttribute('y2',y2);
+  line.setAttribute('x1', x1); line.setAttribute('y1', y1);
+  line.setAttribute('x2', x2); line.setAttribute('y2', y2);
   line.setAttribute('stroke', color);
-  line.setAttribute('stroke-width','2.5');
-  line.setAttribute('stroke-linecap','round');
-  line.setAttribute('opacity','0.65');
+  line.setAttribute('stroke-width', '3');
+  line.setAttribute('stroke-linecap', 'round');
+  line.setAttribute('opacity', '0.7');
+  line.setAttribute('stroke-dasharray', '5,5');
   svg.appendChild(line);
+  
+  // Auto remove line after 1.5 seconds
+  setTimeout(() => {
+    if (line && line.remove) line.remove();
+  }, 1500);
 }
 
 // ═══ REPLAY / NAV ═══
 function replayGame() {
-  if (gameMode === 1) startGame1P(); else startGame2P();
+  if (gameMode === 1) {
+    startGame1P();
+  } else {
+    startGame2P();
+  }
 }
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
 }
 function goSetup() {
-  g2TimerIntervals.forEach(t => { if(t) clearInterval(t); });
+  g2GameActive = false;
+  if (g2TimerIntervals) {
+    g2TimerIntervals.forEach(t => { if(t) clearInterval(t); });
+  }
   if (bgAudio) bgAudio.pause();
   showScreen('setup-screen');
 }
@@ -1237,10 +1291,10 @@ function burst(el, color) {
   const rect = el.getBoundingClientRect();
   const cx = rect.left + rect.width/2, cy = rect.top + rect.height/2;
   const container = document.getElementById('burst-container');
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 12; i++) {
     const p = document.createElement('div');
     p.className = 'burst-particle';
-    const angle = (i/10)*2*Math.PI, dist = 40 + Math.random()*40;
+    const angle = (i/12)*2*Math.PI, dist = 45 + Math.random()*50;
     p.style.setProperty('--dx', Math.cos(angle)*dist+'px');
     p.style.setProperty('--dy', Math.sin(angle)*dist+'px');
     p.style.left = cx+'px'; p.style.top = cy+'px';
@@ -1251,12 +1305,12 @@ function burst(el, color) {
   }
 }
 function burstFullscreen(color) {
-  for (let i = 0; i < 8; i++) {
+  for (let i = 0; i < 12; i++) {
     setTimeout(() => {
       const x = Math.random()*window.innerWidth, y = Math.random()*window.innerHeight;
       const fakeEl = { getBoundingClientRect: () => ({left:x-5,top:y-5,width:10,height:10}) };
       burst(fakeEl, i%2===0 ? color : '#FFD700');
-    }, i*120);
+    }, i*100);
   }
 }
 </script>
