@@ -341,12 +341,13 @@
   .next-btn:active { transform: scale(0.96); }
 
   /* ── GAME SCREEN – 2 PLAYERS ── */
-  #game2-screen { padding: 8px; gap: 8px; min-height: 100vh; }
+  #game2-screen { padding: 8px; gap: 8px; min-height: 100vh; display: flex; flex-direction: column; }
   .game2-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 4px 6px;
+    flex-shrink: 0;
   }
   .rounds-info {
     font-size: 0.9rem;
@@ -363,6 +364,7 @@
     gap: 8px;
     flex: 1;
     width: 100%;
+    min-height: 0;
   }
   .player-panel {
     flex: 1;
@@ -376,6 +378,8 @@
     border: 2px solid transparent;
     transition: border-color 0.25s, box-shadow 0.25s;
     box-shadow: 0 3px 16px rgba(124,58,237,0.1);
+    min-height: 0;
+    overflow: hidden;
   }
   .player-panel.p1-color { border-top: 4px solid #7C3AED; }
   .player-panel.p2-color { border-top: 4px solid #2563EB; }
@@ -415,8 +419,8 @@
   .p1-color .win-dot.filled { background: #7C3AED; }
   .p2-color .win-dot.filled { background: #2563EB; }
 
-  .p2-match-area { flex: 1; position: relative; display: flex; flex-direction: column; min-height: 0; }
-  .p2-columns { display: flex; gap: 4px; flex: 1; }
+  .p2-match-area { flex: 1; position: relative; display: flex; flex-direction: column; min-height: 200px; }
+  .p2-columns { display: flex; gap: 4px; flex: 1; min-height: 0; }
   .p2-col { flex: 1; display: flex; flex-direction: column; gap: 5px; z-index: 2; }
   .p2-svg {
     position: absolute; top: 0; left: 0; right: 0; bottom: 0;
@@ -452,10 +456,12 @@
 
   /* Locked panel overlay */
   .panel-done-msg {
-    display: none;
+    visibility: hidden;
+    opacity: 0;
     position: absolute; inset: 0;
-    background: rgba(255,255,255,0.85);
+    background: rgba(255,255,255,0.9);
     border-radius: 14px;
+    display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
@@ -463,8 +469,10 @@
     z-index: 10;
     font-size: 1.5rem;
     font-weight: 900;
+    transition: opacity 0.2s;
+    pointer-events: none;
   }
-  .panel-done-msg.show { display: flex; }
+  .panel-done-msg.show { visibility: visible; opacity: 1; pointer-events: auto; }
   .panel-done-msg .done-icon { font-size: 2.5rem; }
 
   /* ── RESULT SCREEN ── */
@@ -1009,7 +1017,6 @@ function startGame2P() {
 function startPlayerRound(pi) {
   const p = pi + 1;
   g2CurrentPairs[pi] = shuffle(allPairs).slice(0, 5);
-  g2Matched.constructor === Array ? null : null; // dummy
   g2MatchedCounts[pi] = 0;
   g2SelectedCards[pi] = {};
   g2Finished[pi] = false;
