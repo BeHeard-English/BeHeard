@@ -789,6 +789,7 @@ let g2ElapsedTimes = [0, 0];
 let g2CurrentPairs = [[], []];   // each player has own shuffled set
 let g2RoundActive = [false, false];
 let g2GameActive = true;
+let g2UsedIndices = [[], []];    // track used pair indices per player to reduce repetition
 
 // ═══ AUDIO ═══
 function getAudioCtx() {
@@ -877,17 +878,30 @@ document.getElementById('docx-file').addEventListener('change', async (e) => {
 
 document.getElementById('music-file').addEventListener('change', (e) => {
   const file = e.target.files[0]; if (!file) return;
-  if (bgAudio) { bgAudio.pause(); bgAudio = null; }
-  bgAudio = new Audio(URL.createObjectURL(file));
+  if (bgAudio) {
+    bgAudio.pause();
+    if (bgAudio.src) URL.revokeObjectURL(bgAudio.src);
+    bgAudio = null;
+  }
+  const objectUrl = URL.createObjectURL(file);
+  bgAudio = new Audio(objectUrl);
   bgAudio.loop = true; bgAudio.volume = 0.35;
   document.getElementById('music-status').textContent = '🎵 ' + file.name;
 });
 
 function parseVocab(text) {
   return text.split('\n').map(l => l.trim()).filter(Boolean).reduce((acc, line) => {
-    const sep = line.indexOf(':');
+    // Support multiple separators: ":", " - ", " = "
+    let sep = -1, sepLen = 1;
+    if (line.includes(':')) {
+      sep = line.indexOf(':'); sepLen = 1;
+    } else if (line.includes(' - ')) {
+      sep = line.indexOf(' - '); sepLen = 3;
+    } else if (line.includes(' = ')) {
+      sep = line.indexOf(' = '); sepLen = 3;
+    }
     if (sep === -1) return acc;
-    const en = line.slice(0, sep).trim(), vi = line.slice(sep + 1).trim();
+    const en = line.slice(0, sep).trim(), vi = line.slice(sep + sepLen).trim();
     if (en && vi) acc.push({ en, vi });
     return acc;
   }, []);
@@ -986,9 +1000,10 @@ function checkMatch1P() {
   } else {
     g1SelectedLeft.classList.add('matched-wrong'); g1SelectedRight.classList.add('matched-wrong');
     playWrong();
+    const prevLeft = g1SelectedLeft, prevRight = g1SelectedRight;
     setTimeout(() => {
-      g1SelectedLeft.classList.remove('selected','matched-wrong');
-      g1SelectedRight.classList.remove('selected','matched-wrong');
+      prevLeft.classList.remove('selected','matched-wrong');
+      prevRight.classList.remove('selected','matched-wrong');
     }, 400);
   }
   g1SelectedLeft = null; g1SelectedRight = null;
@@ -1017,6 +1032,8 @@ function startGame2P() {
   g2SelectedCards = [{}, {}];
   g2CurrentPairs = [[], []];
   
+  g2UsedIndices = [[], []];
+  
   // Clear any existing timers
   g2TimerIntervals.forEach(t => { if(t) clearInterval(t); });
   g2TimerIntervals = [null, null];
@@ -1035,7 +1052,17 @@ function startGame2P() {
 function startPlayerRound(pi) {
   if (!g2GameActive) return;
   const p = pi + 1;
-  g2CurrentPairs[pi] = shuffle(allPairs).slice(0, Math.min(5, allPairs.length));
+  // Pick 5 pairs, avoiding recently used ones for variety
+  const batchSize = Math.min(5, allPairs.length);
+  let available = allPairs.map((_, i) => i).filter(i => !g2UsedIndices[pi].includes(i));
+  if (available.length < batchSize) {
+    // Reset used pool when exhausted
+    g2UsedIndices[pi] = [];
+    available = allPairs.map((_, i) => i);
+  }
+  const chosen = shuffle(available).slice(0, batchSize);
+  g2UsedIndices[pi].push(...chosen);
+  g2CurrentPairs[pi] = chosen.map(i => allPairs[i]);
   g2MatchedCounts[pi] = 0;
   g2SelectedCards[pi] = {};
   g2Finished[pi] = false;
@@ -1113,7 +1140,7 @@ function checkMatch2P(p) {
     sel.left.classList.remove(selClass); sel.right.classList.remove(selClass);
     sel.left.classList.add('matched-correct'); sel.right.classList.add('matched-correct');
     const lineColor = pi === 0 ? '#7C3AED' : '#2563EB';
-    drawLine(`p${p}-svg`, `p${p}-match-area`, sel.left, sel.right, lineColor);
+    drawLine(`p${p}-svg`, `p${p}-match-area`, sel.left, sel.right, lineColor, true);
     playCorrect(); 
     burst(sel.left, lineColor);
     burst(sel.right, lineColor);
@@ -1124,9 +1151,10 @@ function checkMatch2P(p) {
   } else {
     sel.left.classList.add('matched-wrong'); sel.right.classList.add('matched-wrong');
     playWrong();
+    const prevLeft = sel.left, prevRight = sel.right;
     setTimeout(() => {
-      if (sel.left) sel.left.classList.remove(selClass, 'matched-wrong');
-      if (sel.right) sel.right.classList.remove(selClass, 'matched-wrong');
+      if (prevLeft) prevLeft.classList.remove(selClass, 'matched-wrong');
+      if (prevRight) prevRight.classList.remove(selClass, 'matched-wrong');
     }, 400);
   }
   g2SelectedCards[pi] = {};
@@ -1215,7 +1243,9 @@ function endGame2P() {
   const n1 = document.getElementById('p1-display-name').textContent;
   const n2 = document.getElementById('p2-display-name').textContent;
   let trophy, title, sub;
-  if (s1 >= totalRounds) {
+  if (s1 >= totalRounds && s2 >= totalRounds) {
+    trophy = '🤝'; title = `Hòa!`; sub = `Cả hai đều xuất sắc!`;
+  } else if (s1 >= totalRounds) {
     trophy = '🏆'; title = `${n1} chiến thắng!`; sub = `Đạt ${totalRounds} lượt thắng trước!`;
   } else {
     trophy = '🏆'; title = `${n2} chiến thắng!`; sub = `Đạt ${totalRounds} lượt thắng trước!`;
@@ -1235,7 +1265,7 @@ function closeOverlay() {
 }
 
 // ═══ DRAW LINE (CẢI THIỆN) ═══
-function drawLine(svgId, areaId, left, right, color) {
+function drawLine(svgId, areaId, left, right, color, autoRemove = false) {
   const svg = document.getElementById(svgId);
   const area = document.getElementById(areaId);
   if (!svg || !area || !left || !right) return;
@@ -1259,10 +1289,12 @@ function drawLine(svgId, areaId, left, right, color) {
   line.setAttribute('stroke-dasharray', '5,5');
   svg.appendChild(line);
   
-  // Auto remove line after 1.5 seconds
-  setTimeout(() => {
-    if (line && line.remove) line.remove();
-  }, 1500);
+  // Only auto-remove in 2P mode (lines in 1P stay until next round)
+  if (autoRemove) {
+    setTimeout(() => {
+      if (line && line.remove) line.remove();
+    }, 1500);
+  }
 }
 
 // ═══ REPLAY / NAV ═══
