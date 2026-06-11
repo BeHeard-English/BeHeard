@@ -1036,7 +1036,7 @@ function checkMatch1P() {
     g1SelectedLeft.classList.add('matched-correct'); g1SelectedRight.classList.add('matched-correct');
     drawLine('g1-svg', 'g1-match-area', g1SelectedLeft, g1SelectedRight, '#16A34A');
     playCorrect(); burst(g1SelectedLeft, '#7C3AED');
-    try { window.parent.postMessage({ type: 'CORRECT_ANSWER' }, '*'); } catch(e) {}
+    try { window.parent.postMessage({ type: 'CORRECT_ANSWER', word: g1CurrentPairs[lIdx].en }, '*'); } catch(e) {}
     g1Score++; g1Matched++;
     document.getElementById('g1-score').textContent = g1Score;
     if (g1Matched === g1CurrentPairs.length) {
@@ -1196,7 +1196,7 @@ function checkMatch2P(p) {
     const lineColor = pi === 0 ? '#7C3AED' : '#2563EB';
     drawLine(`p${p}-svg`, `p${p}-match-area`, sel.left, sel.right, lineColor, true);
     playCorrect();
-    try { window.parent.postMessage({ type: 'CORRECT_ANSWER' }, '*'); } catch(e) {}
+    try { window.parent.postMessage({ type: 'CORRECT_ANSWER', word: g2CurrentPairs[pi][lIdx].en }, '*'); } catch(e) {}
     burst(sel.left, lineColor);
     burst(sel.right, lineColor);
     g2MatchedCounts[pi]++;
