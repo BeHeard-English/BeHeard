@@ -255,6 +255,7 @@
   .match-area { width: 100%; max-width: 800px; position: relative; flex: 1; }
   .match-columns { display: flex; gap: 0; align-items: stretch; }
   .match-col { flex: 1; display: flex; flex-direction: column; gap: 10px; padding: 0 6px; z-index: 2; }
+  .match-col.has-decoys { justify-content: space-between; }
   .col-label {
     font-size: 0.75rem;
     font-weight: 800;
@@ -429,6 +430,7 @@
   .p2-match-area { flex: 1; position: relative; display: flex; flex-direction: column; min-height: 200px; }
   .p2-columns { display: flex; gap: 10px; flex: 1; min-height: 0; }
   .p2-col { flex: 1; display: flex; flex-direction: column; gap: 10px; z-index: 2; }
+  .p2-col.has-decoys { justify-content: space-between; }
   .p2-svg {
     position: absolute; top: 0; left: 0; right: 0; bottom: 0;
     pointer-events: none; z-index: 1; overflow: visible;
@@ -997,17 +999,29 @@ function loadRound1P() {
   colL.innerHTML = '<div class="col-label">Tiếng Anh</div>';
   colR.innerHTML = '<div class="col-label">Tiếng Việt</div>';
   document.getElementById('g1-svg').innerHTML = '';
-  const rights = shuffle(g1CurrentPairs.map(p => p.vi));
+
+  // Right column = correct meanings + up to 2 decoy meanings from other pairs
+  const correctVis = g1CurrentPairs.map(p => p.vi);
+  const decoyPool = allPairs.filter(p => !g1CurrentPairs.includes(p)).map(p => p.vi)
+    .filter(vi => !correctVis.includes(vi));
+  const decoys = shuffle(decoyPool).slice(0, Math.min(2, decoyPool.length));
+  const rightItems = shuffle([
+    ...correctVis.map(vi => ({ vi, decoy: false })),
+    ...decoys.map(vi => ({ vi, decoy: true }))
+  ]);
+
   g1CurrentPairs.forEach((pair, i) => {
     const c = makeCard(pair.en, 'word-card');
     c.dataset.idx = i; c.dataset.side = 'left';
     c.addEventListener('click', () => clickCard1P(c, 'left', i));
     colL.appendChild(c);
   });
-  rights.forEach((vi, i) => {
-    const c = makeCard(vi, 'word-card');
-    c.dataset.vi = vi; c.dataset.side = 'right';
-    c.addEventListener('click', () => clickCard1P(c, 'right', i));
+  if (decoys.length > 0) colL.classList.add('has-decoys'); else colL.classList.remove('has-decoys');
+  rightItems.forEach((item) => {
+    const c = makeCard(item.vi, 'word-card');
+    c.dataset.vi = item.vi; c.dataset.side = 'right';
+    if (item.decoy) c.dataset.decoy = '1';
+    c.addEventListener('click', () => clickCard1P(c, 'right', 0));
     colR.appendChild(c);
   });
 }
@@ -1150,17 +1164,29 @@ function renderPlayer2P(p, pairs) {
   colL.innerHTML = ''; colR.innerHTML = '';
   const svgEl = document.getElementById(`p${p}-svg`);
   if (svgEl) svgEl.innerHTML = '';
-  const rights = shuffle(pairs.map(pr => pr.vi));
+
+  // Right column = correct meanings + up to 2 decoy meanings from other pairs
+  const correctVis = pairs.map(pr => pr.vi);
+  const decoyPool = allPairs.filter(pr => !pairs.includes(pr)).map(pr => pr.vi)
+    .filter(vi => !correctVis.includes(vi));
+  const decoys = shuffle(decoyPool).slice(0, Math.min(2, decoyPool.length));
+  const rightItems = shuffle([
+    ...correctVis.map(vi => ({ vi, decoy: false })),
+    ...decoys.map(vi => ({ vi, decoy: true }))
+  ]);
+
   pairs.forEach((pair, i) => {
     const c = makeCard(pair.en, 'word-card-sm');
     c.dataset.idx = i; c.dataset.side = 'left';
     c.addEventListener('click', () => clickCard2P(c, 'left', i, p));
     colL.appendChild(c);
   });
-  rights.forEach((vi, idx) => {
-    const c = makeCard(vi, 'word-card-sm');
-    c.dataset.vi = vi; c.dataset.side = 'right';
+  if (decoys.length > 0) colL.classList.add('has-decoys'); else colL.classList.remove('has-decoys');
+  rightItems.forEach((item, idx) => {
+    const c = makeCard(item.vi, 'word-card-sm');
+    c.dataset.vi = item.vi; c.dataset.side = 'right';
     c.dataset.rightIdx = idx;
+    if (item.decoy) c.dataset.decoy = '1';
     c.addEventListener('click', () => clickCard2P(c, 'right', idx, p));
     colR.appendChild(c);
   });
